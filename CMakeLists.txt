@@ -5,4 +5,5 @@ project(ESP32_flag_accel)
 
 set(CMAKE_CXX_STANDARD 17)
 
-add_executable(ESP32_flag_accel main.cpp)
+add_subdirectory(lib)
+add_subdirectory(src)
