@@ -1,0 +1,13 @@
+# Target labels
+ bootloader
+# Source files and their labels
+C:/Users/krist/CLion/CLionProjects/ESP32_flag_accel/build/CMakeFiles/bootloader
+C:/Users/krist/CLion/CLionProjects/ESP32_flag_accel/build/CMakeFiles/bootloader.rule
+C:/Users/krist/CLion/CLionProjects/ESP32_flag_accel/build/CMakeFiles/bootloader-complete.rule
+C:/Users/krist/CLion/CLionProjects/ESP32_flag_accel/build/bootloader-prefix/src/bootloader-stamp/bootloader-build.rule
+C:/Users/krist/CLion/CLionProjects/ESP32_flag_accel/build/bootloader-prefix/src/bootloader-stamp/bootloader-configure.rule
+C:/Users/krist/CLion/CLionProjects/ESP32_flag_accel/build/bootloader-prefix/src/bootloader-stamp/bootloader-download.rule
+C:/Users/krist/CLion/CLionProjects/ESP32_flag_accel/build/bootloader-prefix/src/bootloader-stamp/bootloader-install.rule
+C:/Users/krist/CLion/CLionProjects/ESP32_flag_accel/build/bootloader-prefix/src/bootloader-stamp/bootloader-mkdir.rule
+C:/Users/krist/CLion/CLionProjects/ESP32_flag_accel/build/bootloader-prefix/src/bootloader-stamp/bootloader-patch.rule
+C:/Users/krist/CLion/CLionProjects/ESP32_flag_accel/build/bootloader-prefix/src/bootloader-stamp/bootloader-update.rule
