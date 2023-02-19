@@ -11,7 +11,7 @@
 static const char *TAG = "ADXL345";
 
 /**
- * @brief Read a sequence of bytes from an ADXL345 sensor registers
+ * @brief Read a sequence of bytes from an ADXL345 sensor registers.
  */
 esp_err_t adxl345_register_read(uint8_t reg_addr, uint8_t *data, size_t len)
 {
@@ -22,7 +22,7 @@ esp_err_t adxl345_register_read(uint8_t reg_addr, uint8_t *data, size_t len)
 }
 
 /**
- * @brief Write a byte to an ADXL345 sensor register
+ * @brief Write a byte to an ADXL345 sensor register.
  */
 esp_err_t adxl345_register_write_byte(uint8_t reg_addr, uint8_t data)
 {
@@ -35,7 +35,7 @@ esp_err_t adxl345_register_write_byte(uint8_t reg_addr, uint8_t data)
 }
 
 /**
- * @brief ADXL345 I2C slave initialization
+ * @brief ADXL345 I2C slave initialization.
  */
 esp_err_t adxl345_i2c_slave_init(void)
 {
@@ -63,6 +63,14 @@ err:
         return ret;
 }
 
+/**
+ * @brief Read raw acceleration data from the ADXL345 sensor. Divide the
+ * values by 0x0FFF to get the acceleration as multiples of 1g.
+ *
+ * @param ax Pointer to x-axis acceleration data.
+ * @param ay Pointer to y-axis acceleration data.
+ * @param az Pointer to z-axis acceleration data.
+ */
 esp_err_t adxl345_read_data(int16_t *ax, int16_t *ay, int16_t *az)
 {
         esp_err_t ret = ESP_OK;

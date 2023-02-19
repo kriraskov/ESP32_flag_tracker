@@ -8,9 +8,9 @@
 
 The following environment variables needs to be set:
 
- - IDF_PATH - path to the esp-idf directory.
- - IDF_TARGET - ESP32 target to build (`esp32c3`).
- - ESPPORT - COM port of the ESP32
+ - `IDF_PATH` - path to the esp-idf directory.
+ - `IDF_TARGET` - ESP32 target to build (`esp32c3`).
+ - `ESPPORT` - COM port of the ESP32.
 
 IDF_PATH can be found by running `esp-idf/export.sh`. This script will also
 output paths added to the `PATH` variable, which needs to be updated
