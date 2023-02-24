@@ -35,9 +35,9 @@ esp_err_t adxl345_register_write_byte(uint8_t reg_addr, uint8_t data)
 }
 
 /**
- * @brief ADXL345 I2C slave initialization.
+ * @brief ADXL345 initialization.
  */
-esp_err_t adxl345_i2c_slave_init(void)
+esp_err_t adxl345_init(void)
 {
         esp_err_t ret = ESP_OK;
 
@@ -78,7 +78,7 @@ esp_err_t adxl345_read_data(int16_t *ax, int16_t *ay, int16_t *az)
 
         ESP_GOTO_ON_ERROR(adxl345_register_read(
                 ADXL345_REG_DATAX0, data, 6), err, TAG,
-                          "Failed to read acceleration data.");
+                          "Failed to read data from sensor.");
 
         *ax = (int16_t) ((int16_t) (data[1] << 8) | data[0]);
         *ay = (int16_t) ((int16_t) (data[3] << 8) | data[2]);
