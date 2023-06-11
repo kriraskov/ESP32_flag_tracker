@@ -7,6 +7,7 @@
 #include "i2c_master.h"
 
 static const char *TAG = "I2C_MASTER";
+
 /**
  * @brief i2c master initialization
  */
