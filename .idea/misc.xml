@@ -5,5 +5,8 @@
     <libraryRoots>
       <file path="$USER_HOME$/Espressif/esp-idf" />
     </libraryRoots>
+    <excludeRoots>
+      <file path="$PROJECT_DIR$/build" />
+    </excludeRoots>
   </component>
 </project>
