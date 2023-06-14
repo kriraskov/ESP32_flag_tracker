@@ -1,5 +1,5 @@
+#include <esp_wifi.h>
 #include <esp_log.h>
-#include <esp_err.h>
 #include "i2c_master.h"
 #include "adxl345.h"
 #include "wifi.h"
@@ -8,15 +8,20 @@ static const char *TAG = "ESP32_flag_accel";
 
 void app_main(void)
 {
-        uint8_t wifi_ssid[32] = "fat-man";
-        uint8_t wifi_password[64] = "091102IAUG45";
+        wifi_config_t wifi_conf = {
+                .sta = {
+                        .ssid = "fat-man",
+                        .password = "091102IAUG45",
+                        .threshold.authmode = WIFI_AUTH_WPA2_PSK,
+                },
+        };
 
-        ESP_ERROR_CHECK(i2c_master_init());
-        ESP_LOGI(TAG, "I2C initialized successfully.");
+        /* Initialize the ESP32 as I2C master. */
+        i2c_master_init();
 
-        ESP_ERROR_CHECK(adxl345_init());
-        ESP_LOGI(TAG, "ADXL345 accelerometer initialized successfully.");
+        /* Initialize the ADXL345 accelerometer for I2C. */
+        adxl345_init();
 
-        ESP_ERROR_CHECK(wifi_connect(wifi_ssid, wifi_password));
-        ESP_LOGI(TAG, "Wi-Fi connection established successfully.");
+        /* Connect to a Wi-Fi network. */
+        wifi_connect(&wifi_conf);
 }
