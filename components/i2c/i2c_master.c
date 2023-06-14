@@ -8,13 +8,8 @@
 
 static const char *TAG = "I2C_MASTER";
 
-/**
- * @brief i2c master initialization
- */
-esp_err_t i2c_master_init(void)
+void i2c_master_init(void)
 {
-        esp_err_t ret = ESP_OK;
-
         /* Configure GPIO for I2C. */
          i2c_config_t conf = {
                 .mode = I2C_MODE_MASTER,
@@ -25,14 +20,13 @@ esp_err_t i2c_master_init(void)
                 .master.clk_speed = I2C_MASTER_FREQ_HZ,
         };
 
-        ESP_GOTO_ON_ERROR(i2c_param_config(I2C_MASTER_NUM, &conf), err, TAG,
-                          "Failed to configure GPIO.");
+        ESP_ERROR_CHECK(i2c_param_config(I2C_MASTER_NUM, &conf));
+        ESP_LOGI(TAG, "Successfully configured GPIO.");
 
-        ESP_GOTO_ON_ERROR(i2c_driver_install(I2C_MASTER_NUM, conf.mode,
-                                             I2C_MASTER_RX_BUF_DISABLE,
-                                             I2C_MASTER_TX_BUF_DISABLE, 0),
-                          err, TAG, "Failed to install i2c driver.");
+        ESP_ERROR_CHECK(i2c_driver_install(
+                I2C_MASTER_NUM, conf.mode, I2C_MASTER_RX_BUF_DISABLE,
+                I2C_MASTER_TX_BUF_DISABLE, 0));
+        ESP_LOGI(TAG, "Successfully installed driver.");
 
-err:
-        return ret;
+        ESP_LOGI(TAG, "I2C initialized successfully.");
 }

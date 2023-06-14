@@ -8,12 +8,29 @@
 #define ADXL345_REG_DATA_FORMAT             0x31        /*!< Data format control register. */
 #define ADXL345_REG_DATAX0                  0x32        /*!< X-Axis data 0 register. */
 
-esp_err_t adxl345_register_read(uint8_t reg_addr, uint8_t *data, size_t len);
+/**
+ * @brief Read a sequence of bytes from an ADXL345 sensor registers.
+ */
+void adxl345_register_read(uint8_t reg_addr, uint8_t *data, size_t len);
 
-esp_err_t adxl345_register_write_byte(uint8_t reg_addr, uint8_t data);
+/**
+ * @brief Write a byte to an ADXL345 sensor register.
+ */
+void adxl345_register_write_byte(uint8_t reg_addr, uint8_t data);
 
-esp_err_t adxl345_init(void);
+/**
+ * @brief ADXL345 initialization.
+ */
+void adxl345_init(void);
 
-esp_err_t adxl345_read_data(int16_t *ax, int16_t *ay, int16_t *az);
+/**
+ * @brief Read raw acceleration data from the ADXL345 sensor. Divide the
+ * values by 0x0FFF to get the acceleration as multiples of 1g.
+ *
+ * @param ax Pointer to x-axis acceleration data.
+ * @param ay Pointer to y-axis acceleration data.
+ * @param az Pointer to z-axis acceleration data.
+ */
+void adxl345_read_data(int16_t *ax, int16_t *ay, int16_t *az);
 
 #endif //ESP32_FLAG_ACCEL_ADXL345_H

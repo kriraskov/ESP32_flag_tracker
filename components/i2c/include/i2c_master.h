@@ -9,6 +9,9 @@
 #define I2C_MASTER_RX_BUF_DISABLE   0         /*!< I2C master doesn't need buffer. */
 #define I2C_MASTER_TIMEOUT_MS       1000
 
-esp_err_t i2c_master_init(void);
+/**
+ * @brief i2c master initialization
+ */
+void i2c_master_init(void);
 
 #endif //ESP32_FLAG_ACCEL_I2C_MASTER_H
