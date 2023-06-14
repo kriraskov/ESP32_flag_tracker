@@ -1,12 +1,23 @@
 #ifndef ESP32_FLAG_ACCEL_ADXL345_H
 #define ESP32_FLAG_ACCEL_ADXL345_H
 
-#define ADXL345_SENSOR_ADDR                 0x53        /*!< Slave address of the ADXL345 sensor. */
+#include <stdint.h>
+#include <stddef.h>
 
-#define ADXL345_REG_BW_RATE                 0x2C        /*!< Data rate and power control register */
-#define ADXL345_REG_POWER_CTL               0x2D        /*!< Power control register. */
-#define ADXL345_REG_DATA_FORMAT             0x31        /*!< Data format control register. */
-#define ADXL345_REG_DATAX0                  0x32        /*!< X-Axis data 0 register. */
+/** Slave address of the ADXL345 sensor. */
+#define ADXL345_SENSOR_ADDR                 0x53
+
+/** Data rate and power control register */
+#define ADXL345_REG_BW_RATE                 0x2C
+
+/** Power control register. */
+#define ADXL345_REG_POWER_CTL               0x2D
+
+/** Data format control register. */
+#define ADXL345_REG_DATA_FORMAT             0x31
+
+/** X-Axis data 0 register. */
+#define ADXL345_REG_DATAX0                  0x32
 
 /**
  * @brief Read a sequence of bytes from an ADXL345 sensor registers.

@@ -1,8 +1,7 @@
-/* ADXL345 accelerometer library.
+/** ADXL345 accelerometer library.
  *
- * Includes functions to communicate with the ADXL345 accelerometer over I2C.
+ *  Includes functions to communicate with the ADXL345 accelerometer over I2C.
  */
-#include <esp_check.h>
 #include <esp_log.h>
 #include "driver/i2c.h"
 #include "i2c_master.h"

@@ -1,8 +1,4 @@
-/* I2C Master setup.
- *
- * Includes
- */
-#include <esp_check.h>
+#include <esp_log.h>
 #include "driver/i2c.h"
 #include "i2c_master.h"
 
