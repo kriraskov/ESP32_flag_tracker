@@ -18,11 +18,30 @@ static const char *TAG = "WIFI";
 /** Number of connection attempts to AP. */
 static int s_retry_num = 0;
 
+esp_blufi_extra_info_t blufi_info = {0};
+
+static wifi_sta_list_t gl_sta_list;
+
+static bool gl_sta_got_ip = true;
+static bool ble_is_connected = false;
+
+
 /** Event group handle for Wi-Fi events. */
 static EventGroupHandle_t s_wifi_event_group;
 
+static int softap_get_current_connection_number(void)
+{
+        esp_err_t ret = esp_wifi_ap_get_sta_list(&gl_sta_list);
+        if (ret == ESP_OK)
+        {
+                return gl_sta_list.num;
+        }
+
+        return 0;
+}
+
 static void wifi_event_handler(void* arg, esp_event_base_t event_base,
-                          int32_t event_id, void* event_data)
+                               int32_t event_id, void* event_data)
 {
         switch (event_id) {
         case WIFI_EVENT_STA_START:
@@ -44,15 +63,24 @@ static void wifi_event_handler(void* arg, esp_event_base_t event_base,
 }
 
 static void ip_event_handler(void* arg, esp_event_base_t event_base,
-                               int32_t event_id, void* event_data)
+                             int32_t event_id, void* event_data)
 {
         ip_event_got_ip_t *event = (ip_event_got_ip_t *) event_data;
+        s_retry_num = 0;
+        gl_sta_got_ip = true;
 
         xEventGroupSetBits(s_wifi_event_group, WIFI_CONNECTED_BIT);
-        s_retry_num = 0;
-
         ESP_LOGI(TAG, "got ip:" IPSTR, IP2STR(&event->ip_info.ip));
 
+        if (ble_is_connected) {
+                wifi_sta_list_t sta_list;
+                esp_err_t ret = esp_wifi_ap_get_sta_list(&sta_list);
+                int n_sta = sta_list.num;
+
+                esp_blufi_send_wifi_conn_report(
+                        WIFI_MODE_STA, ESP_BLUFI_STA_CONN_SUCCESS,
+                        sta_list.num, &blufi_info);
+        }
 }
 
 void wifi_init(void)
