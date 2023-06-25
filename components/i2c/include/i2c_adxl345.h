@@ -25,8 +25,10 @@
 void i2c_adxl345_init(void);
 
 /**
- * @brief Read raw acceleration data from the ADXL345 sensor. Divide the
- * values by 0x0FFF to get the acceleration as multiples of 1g.
+ * @brief Read raw acceleration data from the ADXL345 sensor.
+ *
+ * @note Divide the values by 0x0FFF to get the acceleration as
+ * multiples of 1g.
  *
  * @param ax Pointer to x-axis acceleration data.
  * @param ay Pointer to y-axis acceleration data.
