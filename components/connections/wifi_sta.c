@@ -4,7 +4,7 @@
 #include "freertos/event_groups.h"
 #include "wifi_sta.h"
 
-static const char *TAG = "WIFI";
+static const char *TAG = "WIFI_STA";
 
 /** Maximum number of connection attempts to AP. */
 #define WIFI_MAXIMUM_RETRY      5
