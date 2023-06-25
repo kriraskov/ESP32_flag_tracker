@@ -1,4 +1,4 @@
-# ESP32 accelerometer
+# ESP32 WKF flag tracker
 
 ## Installing ESP-IDF
 

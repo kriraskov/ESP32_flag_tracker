@@ -1,5 +1,5 @@
-#ifndef ESP32_FLAG_ACCEL_I2C_MASTER_H
-#define ESP32_FLAG_ACCEL_I2C_MASTER_H
+#ifndef ESP32_FLAG_TRACKER_I2C_MASTER_H
+#define ESP32_FLAG_TRACKER_I2C_MASTER_H
 
 /** GPIO number used for I2C master clock. */
 #define I2C_MASTER_SCL_IO           3
@@ -27,4 +27,4 @@
  */
 void i2c_master_init(void);
 
-#endif //ESP32_FLAG_ACCEL_I2C_MASTER_H
+#endif //ESP32_FLAG_TRACKER_I2C_MASTER_H

@@ -1,5 +1,5 @@
-#ifndef ESP32_FLAG_ACCEL_WIFI_STA_H
-#define ESP32_FLAG_ACCEL_WIFI_STA_H
+#ifndef ESP32_FLAG_TRACKER_WIFI_STA_H
+#define ESP32_FLAG_TRACKER_WIFI_STA_H
 
 #include <stdint.h>
 
@@ -21,4 +21,4 @@ void wifi_sta_init(void);
  */
 void wifi_sta_connect();
 
-#endif //ESP32_FLAG_ACCEL_WIFI_STA_H
+#endif //ESP32_FLAG_TRACKER_WIFI_STA_H

@@ -1,5 +1,5 @@
-#ifndef ESP32_FLAG_ACCEL_ADXL345_H
-#define ESP32_FLAG_ACCEL_ADXL345_H
+#ifndef ESP32_FLAG_TRACKER_I2C_ADXL345_H
+#define ESP32_FLAG_TRACKER_I2C_ADXL345_H
 
 #include <stdint.h>
 #include <stddef.h>
@@ -20,19 +20,9 @@
 #define ADXL345_REG_DATAX0                  0x32
 
 /**
- * @brief Read a sequence of bytes from an ADXL345 sensor registers.
- */
-void adxl345_register_read(uint8_t reg_addr, uint8_t *data, size_t len);
-
-/**
- * @brief Write a byte to an ADXL345 sensor register.
- */
-void adxl345_register_write_byte(uint8_t reg_addr, uint8_t data);
-
-/**
  * @brief ADXL345 initialization.
  */
-void adxl345_init(void);
+void i2c_adxl345_init(void);
 
 /**
  * @brief Read raw acceleration data from the ADXL345 sensor. Divide the
@@ -42,6 +32,6 @@ void adxl345_init(void);
  * @param ay Pointer to y-axis acceleration data.
  * @param az Pointer to z-axis acceleration data.
  */
-void adxl345_read_data(int16_t *ax, int16_t *ay, int16_t *az);
+void i2c_adxl345_read_data(int16_t *ax, int16_t *ay, int16_t *az);
 
-#endif //ESP32_FLAG_ACCEL_ADXL345_H
+#endif //ESP32_FLAG_TRACKER_I2C_ADXL345_H

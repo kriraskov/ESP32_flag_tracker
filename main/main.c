@@ -1,13 +1,12 @@
 #include <esp_log.h>
-#include "esp_wifi.h"
 #include "nvs_flash.h"
 #include "wifi_provisioning/manager.h"
 #include "i2c_master.h"
-#include "adxl345.h"
+#include "i2c_adxl345.h"
 #include "wifi_sta.h"
 #include "wifi_prov.h"
 
-static const char *TAG = "ESP32_flag_accel";
+static const char *TAG = "ESP32_flag_tracker";
 
 void app_main(void)
 {
@@ -30,7 +29,7 @@ void app_main(void)
         i2c_master_init();
 
         /* Initialize the ADXL345 accelerometer for I2C. */
-        adxl345_init();
+        i2c_adxl345_init();
 
         /* Connect to a Wi-Fi network. */
         wifi_sta_init();
