@@ -1,8 +1,8 @@
 #include <esp_log.h>
-#include <esp_wifi.h>
+#include "esp_wifi.h"
+#include "esp_bt.h"
 #include "freertos/event_groups.h"
-#include "esp_blufi_api.h"
-#include "wifi.h"
+#include "wifi_sta.h"
 
 static const char *TAG = "WIFI";
 
@@ -16,29 +16,10 @@ static const char *TAG = "WIFI";
 #define WIFI_FAIL_BIT           BIT1
 
 /** Number of connection attempts to AP. */
-static int s_retry_num = 0;
-
-esp_blufi_extra_info_t blufi_info = {0};
-
-static wifi_sta_list_t gl_sta_list;
-
-static bool gl_sta_got_ip = true;
-static bool ble_is_connected = false;
-
+static int n_retries = 0;
 
 /** Event group handle for Wi-Fi events. */
 static EventGroupHandle_t s_wifi_event_group;
-
-static int softap_get_current_connection_number(void)
-{
-        esp_err_t ret = esp_wifi_ap_get_sta_list(&gl_sta_list);
-        if (ret == ESP_OK)
-        {
-                return gl_sta_list.num;
-        }
-
-        return 0;
-}
 
 static void wifi_event_handler(void* arg, esp_event_base_t event_base,
                                int32_t event_id, void* event_data)
@@ -47,16 +28,25 @@ static void wifi_event_handler(void* arg, esp_event_base_t event_base,
         case WIFI_EVENT_STA_START:
                 esp_wifi_connect();
                 break;
-        case WIFI_EVENT_STA_DISCONNECTED:
-                if (s_retry_num < WIFI_MAXIMUM_RETRY) {
+        case WIFI_EVENT_STA_DISCONNECTED: {
+                wifi_event_sta_disconnected_t *disconnected =
+                        (wifi_event_sta_disconnected_t *) event_data;
+
+                if (disconnected->reason == WIFI_REASON_ASSOC_LEAVE) {
+                        ESP_LOGI(TAG, "disconnected");
+                        n_retries = 0;
+                } else if (n_retries < WIFI_MAXIMUM_RETRY) {
+                        ESP_LOGI(TAG, "disconnected: reconnecting...");
                         esp_wifi_connect();
-                        ESP_LOGI(TAG, "retry to connect to the AP");
-                        s_retry_num++;
+                        n_retries++;
                 } else {
+                        ESP_LOGE(TAG,"connection failed: %s",
+                                 esp_err_to_name(disconnected->reason));
                         xEventGroupSetBits(s_wifi_event_group, WIFI_FAIL_BIT);
-                        ESP_LOGI(TAG,"connect to the AP fail");
                 }
+
                 break;
+        }
         default:
                 break;
         }
@@ -66,34 +56,23 @@ static void ip_event_handler(void* arg, esp_event_base_t event_base,
                              int32_t event_id, void* event_data)
 {
         ip_event_got_ip_t *event = (ip_event_got_ip_t *) event_data;
-        s_retry_num = 0;
-        gl_sta_got_ip = true;
+        n_retries = 0;
 
         xEventGroupSetBits(s_wifi_event_group, WIFI_CONNECTED_BIT);
         ESP_LOGI(TAG, "got ip:" IPSTR, IP2STR(&event->ip_info.ip));
-
-        if (ble_is_connected) {
-                wifi_sta_list_t sta_list;
-                esp_err_t ret = esp_wifi_ap_get_sta_list(&sta_list);
-                int n_sta = sta_list.num;
-
-                esp_blufi_send_wifi_conn_report(
-                        WIFI_MODE_STA, ESP_BLUFI_STA_CONN_SUCCESS,
-                        sta_list.num, &blufi_info);
-        }
 }
 
-void wifi_init(void)
+void wifi_sta_init(void)
 {
         s_wifi_event_group = xEventGroupCreate();
-        wifi_init_config_t wifi_cfg = WIFI_INIT_CONFIG_DEFAULT();
+        wifi_init_config_t config = WIFI_INIT_CONFIG_DEFAULT();
 
-        ESP_ERROR_CHECK(esp_netif_init());
-        ESP_ERROR_CHECK(esp_event_loop_create_default());
+        ESP_ERROR_CHECK(esp_netif_init());                      // TCP/IP stack
+        ESP_ERROR_CHECK(esp_event_loop_create_default());       // FreeRTOS
 
         esp_netif_create_default_wifi_sta();
 
-        ESP_ERROR_CHECK(esp_wifi_init(&wifi_cfg));
+        ESP_ERROR_CHECK(esp_wifi_init(&config));
 
         /* Register the event handlers. */
         ESP_ERROR_CHECK(esp_event_handler_register(
@@ -101,28 +80,25 @@ void wifi_init(void)
         ESP_ERROR_CHECK(esp_event_handler_register(
                 IP_EVENT, IP_EVENT_STA_GOT_IP, &ip_event_handler, NULL));
 
-        /* Configure and start the Wi-Fi driver. */
-        ESP_ERROR_CHECK(esp_wifi_set_mode(WIFI_MODE_STA));
         ESP_LOGI(TAG, "initialized driver");
 }
 
-void wifi_connect(wifi_config_t *conf)
+void wifi_sta_connect(void)
 {
-        ESP_ERROR_CHECK(esp_wifi_set_config(WIFI_IF_STA, conf));
+        /* Set to STA before connecting; might be in AP mode from other tasks */
+        ESP_ERROR_CHECK(esp_wifi_set_mode(WIFI_MODE_STA));
         ESP_ERROR_CHECK(esp_wifi_start());
 
         /* Wait until connection established or failed, then read
          * status bits (set by event_handler()). */
         EventBits_t bits = xEventGroupWaitBits(
                 s_wifi_event_group, WIFI_CONNECTED_BIT | WIFI_FAIL_BIT,
-                pdFALSE, pdFALSE, portMAX_DELAY);
+                pdTRUE, pdFALSE, portMAX_DELAY);
 
-        /* xEventGroupWaitBits() returns the bits before the call
-         * returned, hence we can test which event actually happened. */
         if (bits & WIFI_CONNECTED_BIT)
-                ESP_LOGI(TAG, "connected to AP: SSID: %s", conf->sta.ssid);
+                ESP_LOGI(TAG, "connected");
         else if (bits & WIFI_FAIL_BIT)
-                ESP_LOGI(TAG, "connection failed: SSID: %s", conf->sta.ssid);
+                ESP_LOGE(TAG, "connection failed");
         else
-                ESP_LOGE(TAG, "UNEXPECTED EVENT");
+                ESP_LOGE(TAG, "unexpected event");
 }

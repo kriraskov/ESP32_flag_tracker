@@ -1,21 +1,18 @@
-#include <esp_wifi.h>
 #include <esp_log.h>
+#include "esp_wifi.h"
 #include "nvs_flash.h"
+#include "wifi_provisioning/manager.h"
 #include "i2c_master.h"
 #include "adxl345.h"
-#include "wifi.h"
+#include "wifi_sta.h"
+#include "wifi_prov.h"
 
 static const char *TAG = "ESP32_flag_accel";
 
 void app_main(void)
 {
-        wifi_config_t wifi_conf = {
-                .sta = {
-                        .ssid = "fat-man",
-                        .password = "091102IAUG45",
-                        .threshold.authmode = WIFI_AUTH_WPA2_PSK,
-                },
-        };
+        bool wifi_provisioned = false;
+        bool reset_prov = true;
 
         esp_err_t ret = nvs_flash_init();
 
@@ -36,6 +33,19 @@ void app_main(void)
         adxl345_init();
 
         /* Connect to a Wi-Fi network. */
-        wifi_init();
-        wifi_connect(&wifi_conf);
+        wifi_sta_init();
+        wifi_prov_init();
+
+        if (reset_prov)
+                wifi_prov_mgr_reset_provisioning();
+
+        ESP_ERROR_CHECK(wifi_prov_mgr_is_provisioned(&wifi_provisioned));
+
+        if (wifi_provisioned) {
+                ESP_LOGI(TAG, "already provisioned: starting STA");
+                wifi_prov_mgr_deinit();
+                wifi_sta_connect();
+        } else {
+                wifi_prov_start();
+        }
 }

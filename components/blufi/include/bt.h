@@ -1,6 +1,0 @@
-#ifndef ESP32_FLAG_ACCEL_BLUETOOTH_H
-#define ESP32_FLAG_ACCEL_BLUETOOTH_H
-
-void blufi_init(void);
-
-#endif //ESP32_FLAG_ACCEL_BLUETOOTH_H
