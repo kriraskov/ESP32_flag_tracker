@@ -8,7 +8,7 @@ static const char *TAG = "I2C_MASTER";
 #define I2C_MASTER_SCL_IO           3
 
 /** GPIO number used for I2C master data. */
-#define I2C_MASTER_SDA_IO           2
+#define I2C_MASTER_SDA_IO           10
 
 /** I2C master clock frequency. */
 #define I2C_MASTER_FREQ_HZ          400000
