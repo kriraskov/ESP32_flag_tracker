@@ -4,8 +4,13 @@
 #include <stdint.h>
 #include <stddef.h>
 
-/** Slave address of the ADXL345 sensor. */
-#define ADXL345_SENSOR_ADDR                 0x53
+/**
+ * @brief Slave address of the ADXL345 sensor.
+ *
+ * @note The address is 0x1D when the SDO/ALT_ADDRESS pin is high, else
+ * it is 0x53.
+ * */
+#define ADXL345_SENSOR_ADDR                 0x1D
 
 /** Data rate and power control register */
 #define ADXL345_REG_BW_RATE                 0x2C
