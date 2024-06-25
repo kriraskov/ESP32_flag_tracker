@@ -1,4 +1,4 @@
-# ESP32 WKF flag tracker
+# ESP32 flag tracker
 
 ## Installing ESP-IDF
 
