@@ -5,7 +5,7 @@
 #include <stddef.h>
 
 /** Slave address of the ADXL345 sensor. */
-#define ADXL345_SENSOR_ADDR                 0x53
+#define ADXL345_SENSOR_ADDR                 0x1D
 
 /** Data rate and power control register */
 #define ADXL345_REG_BW_RATE                 0x2C
